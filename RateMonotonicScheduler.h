@@ -14,6 +14,13 @@ class RateMonotonicScheduler: public Scheduler {
 public:
 	RateMonotonicScheduler();
 	virtual ~RateMonotonicScheduler();
+
+private:
+	void Init();
+
+public:
+	void ScheduleAll();
+	void Reschedule();
 };
 
 #endif /* RATEMONOTONICSCHEDULER_H_ */

@@ -10,8 +10,11 @@
 
 class Scheduler {
 public:
-	Scheduler();
+	virtual Scheduler();
 	virtual ~Scheduler();
+private:
+	sem_t *m_pSemaphore;
+
 private:
 	void Init();
 

@@ -5,6 +5,8 @@
  *      Author: mkerbel
  */
 
+#include <semaphore.h>
+
 #include "Scheduler.h"
 //#include "Task.h"
 
@@ -17,18 +19,18 @@ Scheduler::~Scheduler() {
 	// TODO Auto-generated destructor stub
 }
 
-void Init() {
+void Scheduler::Init() {
 
 }
 
-void Start() {
+void Scheduler::Start() {
 
 }
 
-/*void ScheduleAll() {
+/*void Scheduler::ScheduleAll() {
 
 }
 
-void Reschedule() {
+void Scheduler::Reschedule() {
 
 }*/
