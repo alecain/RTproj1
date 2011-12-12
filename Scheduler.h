@@ -18,9 +18,9 @@ private:
 public:
 	void Start();
 
-	void ScheduleAll();
+	virtual void ScheduleAll()=0;
 
-	void Reschedule();
+	virtual void Reschedule()=0;
 };
 
 #endif /* SCHEDULER_H_ */
