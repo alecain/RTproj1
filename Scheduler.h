@@ -29,9 +29,10 @@ protected:
 	void Init(/*void (*StartFunction)()*/);
 
 public:
-	void Start();
+	static void Start(void *object);
 	virtual void ScheduleAll()=0;
 	void Reschedule();
+	virtual void RegisterTask(Task *pNewTask);
 
 };
 

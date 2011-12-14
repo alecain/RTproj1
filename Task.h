@@ -34,7 +34,7 @@ class Task {
     * How many nanoseconds represent one time unit.
     * This should not exceed 550 milliseconds.
     */
-    const static long UNIT_NANOSECONDS = 1000;
+    const static timespec UNIT_NANOSECONDS;
 
     /**
     * The number of units that the task should take to run.

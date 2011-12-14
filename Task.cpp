@@ -31,6 +31,7 @@ Task::Task(Scheduler *s, int c, int p) {
     this->taskId = taskIdCounter;
     ++taskIdCounter;
     this->runThread = true;
+    UNIT_NANOSECONDS.tv_nsec = 1000;
 }
 
 Task::~Task(){
@@ -53,7 +54,7 @@ static void *Task::run(void *object){
     while (inst->runThread) {
         TraceEvent(_NTO_TRACE_INSERTUSRSTREVENT, _NTO_TRACE_USERFIRST + inst->taskId, "start");
         while (inst->remaining > 0) {
-            nanospin(UNIT_NANOSECONDS);
+            nanospin(&UNIT_NANOSECONDS);
             --inst->remaining;
         }
         returnCheck(sem_wait(&Task::runSemId), true, 1, "Error waiting on runSemId.");

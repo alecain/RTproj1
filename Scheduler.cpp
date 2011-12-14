@@ -20,11 +20,11 @@ void Scheduler::Init(/*void(*StartFunction)()*/) {
 	sem_init(m_pSemaphore, 0, 0);
 	//TODO set highest priority
 	//TODO find out what priority to use
+	pthread_create(m_pSchedulerThread, 0, &Scheduler::Start, this);
 	pthread_setschedprio(m_pSchedulerThread, 100);
-	pthread_create(m_pSchedulerThread, 0, Start, 0);
 }
 
-void Scheduler::Start() {
+static void Scheduler::Start(void *object) {
 	// Starts scheduling thread
 	// Iterate through all tasks and start each one
 	vector<Task*>::iterator it;
