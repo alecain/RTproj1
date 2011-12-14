@@ -1,8 +1,14 @@
 
 #include <pthread.h>
 #include <semaphore.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/trace.h>
 
-int returnCheck(int retValue, bool exitOnError, int exitValue, char* message) {
+#include "Scheduler.h"
+#include "Task.h"
+
+int returnCheck(int retValue, bool exitOnError, int exitValue, const char* message) {
     if (retValue == -1) {
         perror(message);
         if(exitOnError) {
@@ -13,22 +19,28 @@ int returnCheck(int retValue, bool exitOnError, int exitValue, char* message) {
     return(retValue);
 }
 
-Task::Task(Scheduler *s, int c, int p, int taskId){
+int Task::taskIdCounter = 1;
+
+Task::Task(Scheduler *s, int c, int p) {
     this->scheduler = s;
     this->time = c;
     this->period = p;
     this->remaining = 0;
     this->critical = false;
-    this->taskId = taskId;
+    this->taskId = taskIdCounter;
+    ++taskIdCounter;
     this->runThread = true;
+}
+
+Task::~Task(){
+    this->runThread = false;
+    returnCheck(sem_destroy(&Task::runSemId), true, 1, "sem_destroy failed");
+}
+
+void Task::start() {
     returnCheck(pthread_create( &this->threadId,
                     NULL,
                     &Task::run, this ), true, 1, "Task thread creation failed.");
-}
-
-Task::~Task(Scheduler *s, int c, int p, const char *name){
-    this->runThread = false;
-    returnCheck(sem_destroy(&Task::runSemId), true, 1, "sem_destroy failed");
 }
 
 static void *Task::run(void *object){
@@ -37,26 +49,22 @@ static void *Task::run(void *object){
         return NULL;
     }
 
-    while (runThread) {
-        TraceEvent(_NTO_TRACE_INSERTUSRSTREVENT, _NTO_TRACE_USERFIRST + this->taskId, "start");
-        while (remaining > 0) {
+    while (inst->runThread) {
+        TraceEvent(_NTO_TRACE_INSERTUSRSTREVENT, _NTO_TRACE_USERFIRST + inst->taskId, "start");
+        while (inst->remaining > 0) {
             nano_spin(UNIT_NANOSECONDS);
-            --remaining;
+            --inst->remaining;
         }
-        returnCheck(sem_wait(&Task::runSemId), true, 1, "Error waiting on runSemId.");;
-        TraceEvent(_NTO_TRACE_INSERTUSRSTREVENT, _NTO_TRACE_USERFIRST + this->taskId, "end");
+        returnCheck(sem_wait(&Task::runSemId), true, 1, "Error waiting on runSemId.");
+        TraceEvent(_NTO_TRACE_INSERTUSRSTREVENT, _NTO_TRACE_USERFIRST + inst->taskId, "end");
     }
 }
 
 void Task::setPriority(int priority) {
-	pthread_setschedprio(this->taskId, priority);
+	returnCheck(pthread_setschedprio(this->taskId, priority), true, 1, "Error setting priority.");
 }
 
-void Task::setCritical(bool critical) {
-    this->critical = critical;
-}
-
-void Task::schedule(bool reschedule) {
+void Task::schedule() {
     TraceEvent( _NTO_TRACE_INSERTUSRSTREVENT,
                 _NTO_TRACE_USERFIRST + this->taskId,
                 this->remaining == 0 ? "period:1" : "period:0" );
@@ -65,9 +73,7 @@ void Task::schedule(bool reschedule) {
     } else {
         this->remaining = this->time;
     }
-    if (reschedule) {
-        scheduler.reschedule();
-    }
+    scheduler.reschedule();
     returnCheck(sem_post(&Task::runSemId), true, 1, "Error posting runSemId.");
 }
 

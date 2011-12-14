@@ -17,17 +17,24 @@
 #include <pthread.h>
 #include <semaphore.h>
 
+class Scheduler;
+
 /**
 * Represents a task to be scheduled by the Scheduler class.
 */
 class Task {
   private:
 
+	/**
+	 * A global task id that is incremented with each new process.
+	 */
+	static int taskIdCounter;
+
     /**
     * How many nanoseconds represent one time unit.
     * This should not exceed 550 milliseconds.
     */
-    const long UNIT_NANOSECONDS = 1000;
+    const static long UNIT_NANOSECONDS = 1000;
 
     /**
     * The number of units that the task should take to run.
@@ -81,39 +88,49 @@ class Task {
 
 
   public:
-    Task(Scheduler s, int c, int p, int taskId);
+    /**
+     * Instantiates a new Task scheduled by scheduler s, time c, period p and task id taskId.
+     */
+    Task(Scheduler *s, int c, int p);
     ~Task();
 
     /**
-    *
-    */
-    void setCritical(bool critical);
+     * Starts the task thread.
+     */
+    void start();
 
     /**
-    *
+    * Sets whether the task is critical. Critical tasks do not get killed if they missed their deadline.
+    */
+    void setCritical(bool critical) {
+        this->critical = critical;
+    }
+
+    /**
+    * Sets the priority of the task thread. Used by the scheduler.
     */
     void setPriority(int priority);
 
     /**
-    *
+    * Gets the remaining time for this task. Used for some scheduling algorithms.
     */
     int getRemaining() {
         return this->remaining;
     }
 
     /**
-    *
+    * Schedules the task to run.
     */
-    void schedule(bool reschedule);
+    void schedule();
 
     /**
      * Registers a timer to call PeriodElapsed every $period microseconds
      */
-    void Task::RegisterTimer();
+    void RegisterTimer();
 
   private:
     /**
-    *
+    * Burns CPU for `remaining` time in a new thread.
     */
     static void *run(void *object);
 
