@@ -37,6 +37,14 @@ static void *Scheduler::Start(void *object) {
 	for (it = inst->m_tasks.begin(); it < inst->m_tasks.end(); it++) {
 		it->start();
 	}
+
+	// loop
+		// schedule a task
+		// post semaphore -- call reschedule()
+		// wait for semaphore
+		// [ other task runs ]
+		// [ other task posts semaphore ]
+	// end loop
 	sem_post(inst->m_pSemaphore);
 }
 
