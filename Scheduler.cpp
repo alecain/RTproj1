@@ -5,32 +5,23 @@
  *      Author: mkerbel
  */
 
-#include <semaphore.h>
+
 
 #include "Scheduler.h"
 //#include "Task.h"
 
 Scheduler::Scheduler() {
-	// TODO Auto-generated constructor stub
-
+	Init();
 }
 
 Scheduler::~Scheduler() {
-	// TODO Auto-generated destructor stub
 }
 
-void Scheduler::Init() {
-
+void Scheduler::Init(void (*StartFunction)()) {
+	sem_init(m_pSemaphore, 0, 0);
+	pthread_create(m_scheduleTask, 0, Start, 0);
 }
 
-void Scheduler::Start() {
-
+void Scheduler::RegisterTask(Task *pNewTask) {
+	m_Tasks.push_back(pNewTask);
 }
-
-/*void Scheduler::ScheduleAll() {
-
-}
-
-void Scheduler::Reschedule() {
-
-}*/

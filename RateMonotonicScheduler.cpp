@@ -8,26 +8,27 @@
 #include "RateMonotonicScheduler.h"
 
 RateMonotonicScheduler::RateMonotonicScheduler() {
-	// TODO Auto-generated constructor stub
+	Init(&Start);
 
 }
 
 RateMonotonicScheduler::~RateMonotonicScheduler() {
-	// TODO Auto-generated destructor stub
 }
 
-void RateMonotonicScheduler::Init() {
+//TODO Possibly not needed -- will be defined in base class
+/*void RateMonotonicScheduler::Init() {
 	sem_init(semaphore, 0, 0);
-}
+}*/
 
 void RateMonotonicScheduler::Start() {
-
+	// Start scheduling thread
+	sem_post(m_pSemaphore);
 }
 
 void RateMonotonicScheduler::ScheduleAll() {
-	sem_wait(semaphore);
+	sem_wait(m_pSemaphore);
 	// perform scheduling
-	sem_post(semaphore);
+	sem_post(m_pSemaphore);
 }
 
 void RateMonotonicScheduler::Reschedule() {

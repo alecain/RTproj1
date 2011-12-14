@@ -16,7 +16,7 @@ public:
 	virtual ~RateMonotonicScheduler();
 
 private:
-	void Init();
+//	void Init();
 
 public:
 	void ScheduleAll();
