@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/trace.h>
+#include <time.h>
 
-#include "Scheduler.h"
 #include "Task.h"
+#include "Scheduler.h"
 
 int returnCheck(int retValue, bool exitOnError, int exitValue, const char* message) {
     if (retValue == -1) {
@@ -52,7 +53,7 @@ static void *Task::run(void *object){
     while (inst->runThread) {
         TraceEvent(_NTO_TRACE_INSERTUSRSTREVENT, _NTO_TRACE_USERFIRST + inst->taskId, "start");
         while (inst->remaining > 0) {
-            nano_spin(UNIT_NANOSECONDS);
+            nanospin(UNIT_NANOSECONDS);
             --inst->remaining;
         }
         returnCheck(sem_wait(&Task::runSemId), true, 1, "Error waiting on runSemId.");

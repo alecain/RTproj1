@@ -11,8 +11,10 @@
 #include <vector>
 #include <semaphore.h>
 #include <pthread.h>
-#include "Task.h"
 
+using std::vector;
+
+class Task;
 /**
  * The task that performs scheduling operations
  */
@@ -20,11 +22,9 @@ class Scheduler {
 public:
 	Scheduler();
 	~Scheduler();
-private:
+protected:
 	sem_t *m_pSemaphore;
 	pthread_t* m_schedulerThread;
-
-protected:
 	vector<Task*> m_tasks;
 	void Init(/*void (*StartFunction)()*/);
 
