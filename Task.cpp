@@ -75,7 +75,7 @@ void Task::schedule() {
     } else {
         this->remaining = this->time;
     }
-    scheduler.reschedule();
+    scheduler->reschedule();
     returnCheck(sem_post(&Task::runSemId), true, 1, "Error posting runSemId.");
 }
 
