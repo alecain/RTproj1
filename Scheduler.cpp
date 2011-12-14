@@ -18,8 +18,9 @@ Scheduler::~Scheduler() {
 void Scheduler::Init(/*void(*StartFunction)()*/) {
 	sem_init(m_pSemaphore, 0, 0);
 	//TODO set highest priority
-	pthread_setschedparam(m_schedulerThread, SCHED_OTHER, PRIORITY_MAX);
-	pthread_create(m_schedulerThread, 0, Start, 0);
+	//TODO find out what priority to use
+	pthread_setschedprio(m_pSchedulerThread, 100);
+	pthread_create(m_pSchedulerThread, 0, Start, 0);
 }
 
 void Scheduler::Start() {
@@ -28,7 +29,7 @@ void Scheduler::Start() {
 	vector<Task*>::iterator it;
 
 	for (it = m_tasks.begin(); it < m_tasks.end(); it++) {
-		it.Start();
+		it.start();
 	}
 	sem_post(m_pSemaphore);
 }

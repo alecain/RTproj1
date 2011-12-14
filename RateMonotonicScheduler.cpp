@@ -22,7 +22,7 @@ RateMonotonicScheduler::~RateMonotonicScheduler() {
 
 /*void RateMonotonicScheduler::Start() {
 	// Starts scheduling thread
-	// TODO iterate through all tasks and start each one
+	// iterate through all tasks and start each one
 	vector<Task*>::iterator it;
 
 	for(it=m_tasks.begin(); it < m_tasks.end(); it++) {

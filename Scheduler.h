@@ -24,7 +24,7 @@ public:
 	~Scheduler();
 protected:
 	sem_t *m_pSemaphore;
-	pthread_t* m_schedulerThread;
+	pthread_t* m_pSchedulerThread;
 	vector<Task*> m_tasks;
 	void Init(/*void (*StartFunction)()*/);
 
