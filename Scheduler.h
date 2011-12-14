@@ -14,7 +14,6 @@
 
 using std::vector;
 
-class Task;
 /**
  * The task that performs scheduling operations
  */
@@ -29,7 +28,7 @@ protected:
 	void Init(/*void (*StartFunction)()*/);
 
 public:
-	static void Start(void *object);
+	static void *Start(void *object);
 	virtual void ScheduleAll()=0;
 	void Reschedule();
 	virtual void RegisterTask(Task *pNewTask);

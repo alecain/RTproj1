@@ -21,18 +21,23 @@ void Scheduler::Init(/*void(*StartFunction)()*/) {
 	//TODO set highest priority
 	//TODO find out what priority to use
 	pthread_create(m_pSchedulerThread, 0, &Scheduler::Start, this);
-	pthread_setschedprio(m_pSchedulerThread, 100);
+	pthread_setschedprio(*m_pSchedulerThread, 100);
 }
 
-static void Scheduler::Start(void *object) {
+static void *Scheduler::Start(void *object) {
+	Scheduler *inst = dynamic_cast<Scheduler*>(object);
+    if (!inst) {
+        return NULL;
+    }
+
 	// Starts scheduling thread
 	// Iterate through all tasks and start each one
 	vector<Task*>::iterator it;
 
-	for (it = m_tasks.begin(); it < m_tasks.end(); it++) {
+	for (it = inst->m_tasks.begin(); it < inst->m_tasks.end(); it++) {
 		it->start();
 	}
-	sem_post(m_pSemaphore);
+	sem_post(inst->m_pSemaphore);
 }
 
 void Scheduler::RegisterTask(Task *pNewTask) {
