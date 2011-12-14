@@ -31,7 +31,7 @@ protected:
 public:
 	void Start();
 	virtual void ScheduleAll()=0;
-	virtual void Reschedule()=0;
+	void Reschedule();
 
 };
 

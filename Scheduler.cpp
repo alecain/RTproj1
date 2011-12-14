@@ -5,6 +5,7 @@
  *      Author: mkerbel
  */
 
+#include <pthread.h>
 #include "Scheduler.h"
 //#include "Task.h"
 
@@ -29,11 +30,16 @@ void Scheduler::Start() {
 	vector<Task*>::iterator it;
 
 	for (it = m_tasks.begin(); it < m_tasks.end(); it++) {
-		it.start();
+		it->start();
 	}
 	sem_post(m_pSemaphore);
 }
 
 void Scheduler::RegisterTask(Task *pNewTask) {
 	m_tasks.push_back(pNewTask);
+}
+
+void Scheduler::Reschedule() {
+	// TODO post the semaphore
+	sem_post(m_pSemaphore);
 }

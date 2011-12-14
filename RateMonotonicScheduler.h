@@ -20,7 +20,7 @@ private:
 
 public:
 	void ScheduleAll();
-	void Reschedule();
+//	void Reschedule();
 };
 
 #endif /* RATEMONOTONICSCHEDULER_H_ */

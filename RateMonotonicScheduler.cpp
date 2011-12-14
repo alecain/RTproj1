@@ -37,6 +37,6 @@ void RateMonotonicScheduler::ScheduleAll() {
 	sem_post(m_pSemaphore);
 }
 
-void RateMonotonicScheduler::Reschedule() {
-	// TODO post the semaphore
-}
+/*void RateMonotonicScheduler::Reschedule() {
+
+}*/
