@@ -11,7 +11,7 @@
 #include <vector>
 #include <semaphore.h>
 #include <pthread.h>
-#include "Task.cpp"
+#include "Task.h"
 
 /**
  * The task that performs scheduling operations
@@ -22,15 +22,14 @@ public:
 	virtual ~Scheduler();
 private:
 	sem_t *m_pSemaphore;
-	pthread_t* m_scheduleTask;
+	pthread_t* m_schedulerThread;
 
 protected:
-	vector<Task*> m_Tasks;
-	void Init(void (*StartFunction)());
+	vector<Task*> m_tasks;
+	void Init(/*void (*StartFunction)()*/);
 
 public:
-	virtual void Start()=0;
-	void RegisterTask(Task *pNewTask);
+	void Start();
 	virtual void ScheduleAll()=0;
 	virtual void Reschedule()=0;
 
