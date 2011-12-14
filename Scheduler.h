@@ -18,8 +18,8 @@
  */
 class Scheduler {
 public:
-	virtual Scheduler();
-	virtual ~Scheduler();
+	Scheduler();
+	~Scheduler();
 private:
 	sem_t *m_pSemaphore;
 	pthread_t* m_schedulerThread;
