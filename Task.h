@@ -34,7 +34,7 @@ class Task {
     * How many nanoseconds represent one time unit.
     * This should not exceed 550 milliseconds.
     */
-    const static timespec UNIT_NANOSECONDS;
+    static timespec UNIT_NANOSECONDS;
 
     /**
     * The number of units that the task should take to run.
@@ -132,7 +132,7 @@ class Task {
     /**
     * Burns CPU for `remaining` time in a new thread.
     */
-    static void run(void *object);
+    static void *run(void *object);
 
     /**
     *

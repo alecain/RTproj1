@@ -21,6 +21,8 @@ int returnCheck(int retValue, bool exitOnError, int exitValue, const char* messa
 }
 
 int Task::taskIdCounter = 1;
+struct timespec Task::UNIT_NANOSECONDS = {0,0};
+sem_t Task::runSemId;
 
 Task::Task(Scheduler *s, int c, int p) {
     this->scheduler = s;
@@ -33,25 +35,26 @@ Task::Task(Scheduler *s, int c, int p) {
     this->runThread = true;
 
     this->RegisterTimer();
-    //UNIT_NANOSECONDS.tv_nsec = 1000;
+    UNIT_NANOSECONDS.tv_nsec = 1000;
 }
 
 Task::~Task(){
     this->runThread = false;
     //TODO:complaining about the semaphore.. I'm pretty sure it shouldn't be a static semaphore for all tasks
-    //returnCheck(sem_destroy(&Task::runSemId), true, 1, "sem_destroy failed");
+    returnCheck(sem_destroy(&Task::runSemId), true, 1, "sem_destroy failed");
 }
 
 void Task::start() {
 	//TODO:Fix this. complaining about the function the thread is running to start
-   /* returnCheck(pthread_create( &this->threadId,
+   returnCheck(pthread_create( &this->threadId,
                     NULL,
-                    &Task::run, this ), true, 1, "Task thread creation failed.");*/
+                    &Task::run, (void *)this ), true, 1, "Task thread creation failed.");
 }
 
 //TODO:Fix this to compile.. Should this really be returning a void*? Also, can someone explain why this is static to me?
-/*static void *Task::run(void *object){
-    Task *inst = dynamic_cast<Task*>(object);
+// static so it can be passed into the pthread_create, the signature is required by pthread_create
+void *Task::run(void *object) {
+    Task *inst = (Task*) object;
     if (!inst) {
         return NULL;
     }
@@ -65,8 +68,9 @@ void Task::start() {
         returnCheck(sem_wait(&Task::runSemId), true, 1, "Error waiting on runSemId.");
         TraceEvent(_NTO_TRACE_INSERTUSRSTREVENT, _NTO_TRACE_USERFIRST + inst->taskId, "end");
     }
+
+    return( 0 );
 }
-*/
 
 void Task::setPriority(int priority) {
 	returnCheck(pthread_setschedprio(this->taskId, priority), true, 1, "Error setting priority.");
@@ -83,7 +87,7 @@ void Task::schedule() {
     }
     scheduler->Reschedule();
     //TODO:same semaphore problem here
-    //returnCheck(sem_post(&Task::runSemId), true, 1, "Error posting runSemId.");
+    returnCheck(sem_post(&Task::runSemId), true, 1, "Error posting runSemId.");
 }
 
 
