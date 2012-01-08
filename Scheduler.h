@@ -11,6 +11,7 @@
 #include <vector>
 #include <semaphore.h>
 #include <pthread.h>
+#include "Task.h"
 
 using std::vector;
 
@@ -22,8 +23,8 @@ public:
 	Scheduler();
 	~Scheduler();
 protected:
-	sem_t *m_pSemaphore;
-	pthread_t* m_pSchedulerThread;
+	sem_t m_pSemaphore;
+	pthread_t m_pSchedulerThread;
 	vector<Task*> m_tasks;
 	void Init(/*void (*StartFunction)()*/);
 

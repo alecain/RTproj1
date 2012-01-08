@@ -132,12 +132,12 @@ class Task {
     /**
     * Burns CPU for `remaining` time in a new thread.
     */
-    static void *run(void *object);
+    static void run(void *object);
 
     /**
     *
     */
-    static void PeriodElapsed();
+    static void PeriodElapsed(sigval arg);
 
 
 };

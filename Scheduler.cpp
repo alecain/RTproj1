@@ -17,15 +17,15 @@ Scheduler::~Scheduler() {
 }
 
 void Scheduler::Init(/*void(*StartFunction)()*/) {
-	sem_init(m_pSemaphore, 0, 0);
+	sem_init(&this->m_pSemaphore, 0, 0);
 	//TODO set highest priority
 	//TODO find out what priority to use
-	pthread_create(m_pSchedulerThread, 0, &Scheduler::Start, this);
-	pthread_setschedprio(*m_pSchedulerThread, 100);
+	pthread_create(&this->m_pSchedulerThread, 0, &Scheduler::Start, this);
+	pthread_setschedprio(this->m_pSchedulerThread, 100);
 }
 
-static void *Scheduler::Start(void *object) {
-	Scheduler *inst = dynamic_cast<Scheduler*>(object);
+void *Scheduler::Start(void *object) {
+	Scheduler *inst = (Scheduler*)(object);
     if (!inst) {
         return NULL;
     }
@@ -35,7 +35,7 @@ static void *Scheduler::Start(void *object) {
 	vector<Task*>::iterator it;
 
 	for (it = inst->m_tasks.begin(); it < inst->m_tasks.end(); it++) {
-		it->start();
+		(*it)->start();
 	}
 
 	// loop
@@ -45,7 +45,10 @@ static void *Scheduler::Start(void *object) {
 		// [ other task runs ]
 		// [ other task posts semaphore ]
 	// end loop
-	sem_post(inst->m_pSemaphore);
+	sem_post(&inst->m_pSemaphore);
+
+	//TODO:figure out what to return? Should we return?
+	return NULL;
 }
 
 void Scheduler::RegisterTask(Task *pNewTask) {
@@ -54,5 +57,5 @@ void Scheduler::RegisterTask(Task *pNewTask) {
 
 void Scheduler::Reschedule() {
 	// TODO post the semaphore
-	sem_post(m_pSemaphore);
+	sem_post(&m_pSemaphore);
 }
