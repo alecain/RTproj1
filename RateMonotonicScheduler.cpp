@@ -33,7 +33,17 @@ RateMonotonicScheduler::~RateMonotonicScheduler() {
 
 void RateMonotonicScheduler::ScheduleAll() {
 	sem_wait(m_pSemaphore);
-	// perform scheduling
+	vector<Task*>::iterator it;
+	Task* leastPeriodTask = m_tasks.begin();
+
+	for (it = m_tasks.begin(); it < m_tasks.end(); it++) {
+		if(it->getPeriod() < leastPeriodTask->getPeriod())
+		{
+			leastPeriodTask = it;
+		}
+	}
+	it->setPriority(1); //TODO what value do we enter for the priority here?
+	it->schedule();
 	sem_post(m_pSemaphore);
 }
 

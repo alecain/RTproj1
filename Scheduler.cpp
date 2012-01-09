@@ -38,13 +38,16 @@ void *Scheduler::Start(void *object) {
 		(*it)->start();
 	}
 
-	// loop
+	while(!m_tasks.empty()){
 		// schedule a task
+		ScheduleAll();
 		// post semaphore -- call reschedule()
+		Reschedule();
 		// wait for semaphore
+		sem_wait(m_pSchedulerThread);
 		// [ other task runs ]
 		// [ other task posts semaphore ]
-	// end loop
+	}
 	sem_post(&inst->m_pSemaphore);
 
 	//TODO:figure out what to return? Should we return?
@@ -56,6 +59,5 @@ void Scheduler::RegisterTask(Task *pNewTask) {
 }
 
 void Scheduler::Reschedule() {
-	// TODO post the semaphore
 	sem_post(&m_pSemaphore);
 }

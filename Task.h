@@ -119,6 +119,13 @@ class Task {
     }
 
     /**
+     * Gets the period of the task.
+     */
+    int getPeriod() {
+    	return this->period;
+    }
+
+    /**
     * Schedules the task to run.
     */
     void schedule();
