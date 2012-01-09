@@ -44,14 +44,14 @@ Task::~Task(){
     returnCheck(sem_destroy(&this->runSemId), true, 1, "sem_destroy failed");
 }
 
-void Task::start() {
+void Task::Start() {
    returnCheck(pthread_create( &this->threadId,
                     NULL,
-                    &Task::run, (void *)this ), true, 1, "Task thread creation failed.");
+                    &Task::Run, (void *)this ), true, 1, "Task thread creation failed.");
 }
 
 
-void *Task::run(void *object) {
+void *Task::Run(void *object) {
     Task *inst = (Task*) object;
     if (!inst) {
         return NULL;
@@ -72,11 +72,11 @@ void *Task::run(void *object) {
     return( 0 );
 }
 
-void Task::setPriority(int priority) {
+void Task::SetPriority(int priority) {
 	returnCheck(pthread_setschedprio(this->taskId, priority), true, 1, "Error setting priority.");
 }
 
-void Task::schedule() {
+void Task::Schedule() {
     TraceEvent( _NTO_TRACE_INSERTUSRSTREVENT,
                 _NTO_TRACE_USERFIRST + this->taskId,
                 this->remaining == 0 ? "period:1" : "period:0" );
@@ -135,7 +135,7 @@ void Task::PeriodElapsed(sigval arg){
    ptr->RegisterTimer();
 
     //call schedule on the supplied argument
-    ptr->schedule();
+    ptr->Schedule();
 }
 
 

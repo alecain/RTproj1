@@ -12,9 +12,9 @@ void RateMonotonicScheduler::ScheduleAll() {
 	Task* leastPeriodTask;
 
 	for (it = m_tasks.begin(); it < m_tasks.end(); it++) {
-		if((*it)->getPeriod() < leastPeriodTask->getPeriod()) {
+		if((*it)->GetPeriod() < leastPeriodTask->GetPeriod()) {
 			leastPeriodTask = *it;
 		}
 	}
-	leastPeriodTask->setPriority(99);
+	leastPeriodTask->SetPriority(99);
 }

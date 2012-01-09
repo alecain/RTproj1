@@ -97,38 +97,38 @@ class Task {
     /**
      * Starts the task thread.
      */
-    void start();
+    void Start();
 
     /**
     * Sets whether the task is critical. Critical tasks do not get killed if they missed their deadline.
     */
-    void setCritical(bool critical) {
+    void SetCritical(bool critical) {
         this->critical = critical;
     }
 
     /**
     * Sets the priority of the task thread. Used by the scheduler.
     */
-    void setPriority(int priority);
+    void SetPriority(int priority);
 
     /**
     * Gets the remaining time for this task. Used for some scheduling algorithms.
     */
-    int getRemaining() {
+    int GetRemaining() {
         return this->remaining;
     }
 
     /**
      * Gets the period of the task.
      */
-    int getPeriod() {
+    int GetPeriod() {
     	return this->period;
     }
 
     /**
     * Schedules the task to run.
     */
-    void schedule();
+    void Schedule();
 
     /**
      * Registers a timer to call PeriodElapsed every $period microseconds
@@ -139,7 +139,7 @@ class Task {
     /**
     * Burns CPU for `remaining` time in a new thread.
     */
-    static void *run(void *object);
+    static void *Run(void *object);
 
     /**
     *

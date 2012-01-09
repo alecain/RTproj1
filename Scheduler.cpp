@@ -35,7 +35,7 @@ void *Scheduler::Start(void *object) {
 	vector<Task*>::iterator it;
 
 	for (it = inst->m_tasks.begin(); it < inst->m_tasks.end(); it++) {
-		(*it)->start();
+		(*it)->Start();
 	}
 
 	while(!inst->m_tasks.empty()){
