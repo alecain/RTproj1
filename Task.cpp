@@ -106,7 +106,7 @@ void Task::RegisterTimer(){
     timer_create(CLOCK_REALTIME, &event, &timer );
 
     value.it_value.tv_nsec = this->period * UNIT_NANOSECONDS.tv_nsec;
-    value.it_value.tv_sec = 1; //TODO: set to 0 for release
+    value.it_value.tv_sec = 0; //TODO: set to 0 for release
 
     //the following causes the timer to reload... Which is bad when we are debugging.
     //value.it_interval.tv_nsec = this->period*TIMESCALE;

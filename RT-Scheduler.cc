@@ -9,10 +9,10 @@
 int main(int argc, char *argv[]) {
 	std::cout << "Welcome to the QNX Momentics IDE" << std::endl;
 	Scheduler * scheduler(new RateMonotonicScheduler());
-	scheduler->RegisterTask(new Task(scheduler, 1, 2));
-	scheduler->RegisterTask(new Task(scheduler, 1, 2));
-	scheduler->RegisterTask(new Task(scheduler, 1, 2));
-	scheduler->RegisterTask(new Task(scheduler, 1, 2));
+	scheduler->RegisterTask(new Task(scheduler, 1, 5));
+	scheduler->RegisterTask(new Task(scheduler, 1, 5));
+	scheduler->RegisterTask(new Task(scheduler, 1, 5));
+	scheduler->RegisterTask(new Task(scheduler, 1, 5));
 
 	Scheduler::Start(scheduler);
 
