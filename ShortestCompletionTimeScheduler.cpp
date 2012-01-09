@@ -16,19 +16,19 @@ ShortestCompletionTimeScheduler::~ShortestCompletionTimeScheduler() {
 }
 
 void ShortestCompletionTimeScheduler::ScheduleAll(){
-	/*sem_wait(&this->m_pSemaphore);
+//	sem_wait(&this->m_pSemaphore);
 
 	// SCT Scheduling
 	vector<Task*>::iterator it;
-	Task* shortestCompletionTimeTask = m_tasks.begin();
+	Task* shortestCompletionTimeTask;
 
 	for (it = m_tasks.begin(); it < m_tasks.end(); it++) {
-		if(it->getRemaining() < shortestCompletionTimeTask->getRemaining())
+		if((*it)->getRemaining() < shortestCompletionTimeTask->getRemaining())
 		{
-			shortestCompletionTimeTask = it;
+			shortestCompletionTimeTask = *it;
 		}
 	}
-	it->setPriority(1); //TODO what value do we enter for the priority here?
-	it->schedule();*/
+	shortestCompletionTimeTask->setPriority(99);
+//	it->schedule();
 }
 

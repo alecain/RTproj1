@@ -19,20 +19,19 @@ EarliestDeadlineFirstScheduler::~EarliestDeadlineFirstScheduler()
 
 void EarliestDeadlineFirstScheduler::ScheduleAll()
 {
-	/*
-	sem_wait(m_pSemaphore);
+//	sem_wait(m_pSemaphore);
 
 	// EDF scheduling
 	vector<Task*>::iterator it;
-	Task* earliestDeadlineTask = m_tasks.begin();
+	Task* earliestDeadlineTask;
 
 	for (it = m_tasks.begin(); it < m_tasks.end(); it++) {
-		if(it->getPeriod() < earliestDeadlineTask->getPeriod())
+		if((*it)->getPeriod() < earliestDeadlineTask->getPeriod())
 		{
-			earliestDeadlineTask = it;
+			earliestDeadlineTask = *it;
 		}
 	}
-	it->setPriority(1); //TODO what value do we enter for the priority here?
-	it->schedule();*/
+	earliestDeadlineTask->setPriority(99);
+//	it->schedule();
 
 }
