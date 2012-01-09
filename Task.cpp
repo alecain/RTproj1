@@ -22,7 +22,6 @@ int returnCheck(int retValue, bool exitOnError, int exitValue, const char* messa
 
 int Task::taskIdCounter = 1;
 struct timespec Task::UNIT_NANOSECONDS = {0,0};
-//sem_t Task::runSemId;
 
 Task::Task(Scheduler *s, int c, int p) {
     this->scheduler = s;
@@ -42,19 +41,16 @@ Task::Task(Scheduler *s, int c, int p) {
 
 Task::~Task(){
     this->runThread = false;
-    //TODO:complaining about the semaphore.. I'm pretty sure it shouldn't be a static semaphore for all tasks
     returnCheck(sem_destroy(&this->runSemId), true, 1, "sem_destroy failed");
 }
 
 void Task::start() {
-	//TODO:Fix this. complaining about the function the thread is running to start
    returnCheck(pthread_create( &this->threadId,
                     NULL,
                     &Task::run, (void *)this ), true, 1, "Task thread creation failed.");
 }
 
-//TODO:Fix this to compile.. Should this really be returning a void*? Also, can someone explain why this is static to me?
-// static so it can be passed into the pthread_create, the signature is required by pthread_create
+
 void *Task::run(void *object) {
     Task *inst = (Task*) object;
     if (!inst) {
@@ -90,14 +86,12 @@ void Task::schedule() {
         this->remaining = this->time;
     }
     scheduler->Reschedule();
-    //TODO:same semaphore problem here
     returnCheck(sem_post(&this->runSemId), true, 1, "Error posting runSemId.");
 }
 
 
 /*  Begin private member functions */
 
-#define TIMESCALE 10000000
 void Task::RegisterTimer(){
 
 
@@ -111,8 +105,8 @@ void Task::RegisterTimer(){
 
     timer_create(CLOCK_REALTIME, &event, &timer );
 
-    value.it_value.tv_nsec = this->period*TIMESCALE;
-    value.it_value.tv_sec = 1;
+    value.it_value.tv_nsec = this->period * UNIT_NANOSECONDS.tv_nsec;
+    value.it_value.tv_sec = 1; //TODO: set to 0 for release
 
     //the following causes the timer to reload... Which is bad when we are debugging.
     //value.it_interval.tv_nsec = this->period*TIMESCALE;
