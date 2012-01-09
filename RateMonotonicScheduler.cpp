@@ -7,6 +7,15 @@
 
 #include "RateMonotonicScheduler.h"
 
+RateMonotonicScheduler::RateMonotonicScheduler() : Scheduler()
+{
+
+}
+
+RateMonotonicScheduler::~RateMonotonicScheduler()
+{
+
+}
 void RateMonotonicScheduler::ScheduleAll() {
 	vector<Task*>::iterator it;
 	Task* leastPeriodTask;

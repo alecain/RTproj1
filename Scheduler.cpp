@@ -10,19 +10,16 @@
 //#include "Task.h"
 
 Scheduler::Scheduler() {
-	Init();
-}
-
-Scheduler::~Scheduler() {
-}
-
-void Scheduler::Init(/*void(*StartFunction)()*/) {
 	sem_init(&this->m_pSemaphore, 0, 0);
 	//TODO set highest priority
 	//TODO find out what priority to use
 	pthread_create(&this->m_pSchedulerThread, 0, &Scheduler::Start, this);
 	pthread_setschedprio(this->m_pSchedulerThread, 100);
 }
+
+Scheduler::~Scheduler() {
+}
+
 
 void *Scheduler::Start(void *object) {
 	Scheduler *inst = (Scheduler*)(object);

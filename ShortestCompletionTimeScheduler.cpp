@@ -7,8 +7,9 @@
 
 #include "ShortestCompletionTimeScheduler.h"
 
-ShortestCompletionTimeScheduler::ShortestCompletionTimeScheduler() {
-	Init();
+ShortestCompletionTimeScheduler::ShortestCompletionTimeScheduler() : Scheduler()
+{
+
 }
 
 ShortestCompletionTimeScheduler::~ShortestCompletionTimeScheduler() {
@@ -23,12 +24,12 @@ void ShortestCompletionTimeScheduler::ScheduleAll(){
 	Task* shortestCompletionTimeTask;
 
 	for (it = m_tasks.begin(); it < m_tasks.end(); it++) {
-		if((*it)->getRemaining() < shortestCompletionTimeTask->getRemaining())
+		if((*it)->GetRemaining() < shortestCompletionTimeTask->GetRemaining())
 		{
 			shortestCompletionTimeTask = *it;
 		}
 	}
-	shortestCompletionTimeTask->setPriority(99);
+	shortestCompletionTimeTask->SetPriority(99);
 //	it->schedule();
 }
 

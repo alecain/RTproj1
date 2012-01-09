@@ -26,7 +26,6 @@ protected:
 	sem_t m_pSemaphore;
 	pthread_t m_pSchedulerThread;
 	vector<Task*> m_tasks;
-	void Init(/*void (*StartFunction)()*/);
 
 public:
 	static void *Start(void *object);

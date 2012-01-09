@@ -7,9 +7,9 @@
 
 #include "EarliestDeadlineFirstScheduler.h"
 
-EarliestDeadlineFirstScheduler::EarliestDeadlineFirstScheduler()
+EarliestDeadlineFirstScheduler::EarliestDeadlineFirstScheduler() : Scheduler()
 {
-	Init();
+
 }
 
 EarliestDeadlineFirstScheduler::~EarliestDeadlineFirstScheduler()
@@ -23,15 +23,15 @@ void EarliestDeadlineFirstScheduler::ScheduleAll()
 
 	// EDF scheduling
 	vector<Task*>::iterator it;
-	Task* earliestDeadlineTask;
+	Task* EarliestDeadlineTask;
 
 	for (it = m_tasks.begin(); it < m_tasks.end(); it++) {
-		if((*it)->getPeriod() < earliestDeadlineTask->getPeriod())
+		if((*it)->GetPeriod() < EarliestDeadlineTask->GetPeriod())
 		{
-			earliestDeadlineTask = *it;
+			EarliestDeadlineTask = *it;
 		}
 	}
-	earliestDeadlineTask->setPriority(99);
+	EarliestDeadlineTask->SetPriority(99);
 //	it->schedule();
 
 }
