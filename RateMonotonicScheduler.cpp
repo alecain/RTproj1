@@ -42,7 +42,7 @@ void RateMonotonicScheduler::ScheduleAll() {
 			leastPeriodTask = *it;
 		}
 	}
-	(*it)->setPriority(99); //TODO what value do we enter for the priority here?
+	leastPeriodTask->setPriority(99); //TODO what value do we enter for the priority here?
 	//it->schedule();
 }
 
