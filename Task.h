@@ -84,7 +84,7 @@ class Task {
     * The semephore used to block tasks that have completed
     * but have not yet reached their period (idle tasks).
     */
-    static sem_t runSemId;
+    sem_t runSemId;
 
 
   public:

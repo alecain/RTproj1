@@ -19,8 +19,8 @@ RateMonotonicScheduler::~RateMonotonicScheduler() {
 /*void RateMonotonicScheduler::Init() {
 	sem_init(semaphore, 0, 0);
 }*/
-
-/*void RateMonotonicScheduler::Start() {
+/*
+void RateMonotonicScheduler::Start() {
 	// Starts scheduling thread
 	// iterate through all tasks and start each one
 	vector<Task*>::iterator it;
@@ -32,7 +32,7 @@ RateMonotonicScheduler::~RateMonotonicScheduler() {
 }*/
 
 void RateMonotonicScheduler::ScheduleAll() {
-	sem_wait(m_pSemaphore);
+	/*sem_wait(m_pSemaphore);
 	vector<Task*>::iterator it;
 	Task* leastPeriodTask = m_tasks.begin();
 
@@ -43,7 +43,7 @@ void RateMonotonicScheduler::ScheduleAll() {
 		}
 	}
 	it->setPriority(1); //TODO what value do we enter for the priority here?
-	it->schedule();
+	it->schedule();*/
 }
 
 /*void RateMonotonicScheduler::Reschedule() {

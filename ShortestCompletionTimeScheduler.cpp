@@ -16,7 +16,7 @@ ShortestCompletionTimeScheduler::~ShortestCompletionTimeScheduler() {
 }
 
 void ShortestCompletionTimeScheduler::ScheduleAll(){
-	sem_wait(m_pSemaphore);
+	/*sem_wait(&this->m_pSemaphore);
 
 	// SCT Scheduling
 	vector<Task*>::iterator it;
@@ -29,5 +29,6 @@ void ShortestCompletionTimeScheduler::ScheduleAll(){
 		}
 	}
 	it->setPriority(1); //TODO what value do we enter for the priority here?
-	it->schedule();
+	it->schedule();*/
 }
+

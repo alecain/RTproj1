@@ -13,6 +13,9 @@ int main(int argc, char *argv[]) {
 	scheduler->RegisterTask(new Task(scheduler, 1, 2));
 	scheduler->RegisterTask(new Task(scheduler, 1, 2));
 	scheduler->RegisterTask(new Task(scheduler, 1, 2));
+
+	Scheduler::Start(scheduler);
+
 	std::string input;
 	while(std::cin>>input && input!="q"){
 		std::cout<<"what was that?\r\n";

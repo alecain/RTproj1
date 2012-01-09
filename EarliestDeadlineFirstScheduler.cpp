@@ -19,6 +19,7 @@ EarliestDeadlineFirstScheduler::~EarliestDeadlineFirstScheduler()
 
 void EarliestDeadlineFirstScheduler::ScheduleAll()
 {
+	/*
 	sem_wait(m_pSemaphore);
 
 	// EDF scheduling
@@ -32,6 +33,6 @@ void EarliestDeadlineFirstScheduler::ScheduleAll()
 		}
 	}
 	it->setPriority(1); //TODO what value do we enter for the priority here?
-	it->schedule();
+	it->schedule();*/
 
 }

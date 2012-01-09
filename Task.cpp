@@ -22,7 +22,7 @@ int returnCheck(int retValue, bool exitOnError, int exitValue, const char* messa
 
 int Task::taskIdCounter = 1;
 struct timespec Task::UNIT_NANOSECONDS = {0,0};
-sem_t Task::runSemId;
+//sem_t Task::runSemId;
 
 Task::Task(Scheduler *s, int c, int p) {
     this->scheduler = s;
@@ -34,6 +34,8 @@ Task::Task(Scheduler *s, int c, int p) {
     ++taskIdCounter;
     this->runThread = true;
 
+    sem_init(&this->runSemId,0,0);
+
     this->RegisterTimer();
     UNIT_NANOSECONDS.tv_nsec = 1000;
 }
@@ -41,7 +43,7 @@ Task::Task(Scheduler *s, int c, int p) {
 Task::~Task(){
     this->runThread = false;
     //TODO:complaining about the semaphore.. I'm pretty sure it shouldn't be a static semaphore for all tasks
-    returnCheck(sem_destroy(&Task::runSemId), true, 1, "sem_destroy failed");
+    returnCheck(sem_destroy(&this->runSemId), true, 1, "sem_destroy failed");
 }
 
 void Task::start() {
@@ -65,8 +67,8 @@ void *Task::run(void *object) {
             nanospin(&UNIT_NANOSECONDS);
             --inst->remaining;
         }
-        returnCheck(sem_wait(&Task::runSemId), true, 1, "Error waiting on runSemId.");
         TraceEvent(_NTO_TRACE_INSERTUSRSTREVENT, _NTO_TRACE_USERFIRST + inst->taskId, "end");
+        returnCheck(sem_wait(&inst->runSemId), true, 1, "Error waiting on runSemId.");
     }
 
     return( 0 );
@@ -87,7 +89,7 @@ void Task::schedule() {
     }
     scheduler->Reschedule();
     //TODO:same semaphore problem here
-    returnCheck(sem_post(&Task::runSemId), true, 1, "Error posting runSemId.");
+    returnCheck(sem_post(&this->runSemId), true, 1, "Error posting runSemId.");
 }
 
 
@@ -97,7 +99,7 @@ void Task::schedule() {
 void Task::RegisterTimer(){
 
 
-	printf("Registering timer\r\n");
+	//printf("Registering timer\r\n");
 
     struct sigevent event;
     timer_t timer; //out value for timer create

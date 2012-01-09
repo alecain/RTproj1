@@ -38,13 +38,13 @@ void *Scheduler::Start(void *object) {
 		(*it)->start();
 	}
 
-	while(!m_tasks.empty()){
+	while(!inst->m_tasks.empty()){
 		// schedule a task
-		ScheduleAll();
+		inst->ScheduleAll();
 		// post semaphore -- call reschedule()
-		Reschedule();
+		inst->Reschedule();
 		// wait for semaphore
-		sem_wait(m_pSchedulerThread);
+		sem_wait(&inst->m_pSemaphore);
 		// [ other task runs ]
 		// [ other task posts semaphore ]
 	}
