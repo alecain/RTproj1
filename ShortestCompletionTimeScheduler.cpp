@@ -24,6 +24,7 @@ void ShortestCompletionTimeScheduler::ScheduleAll(){
 	Task* shortestCompletionTimeTask;
 
 	for (it = m_tasks.begin(); it < m_tasks.end(); it++) {
+		(*it)->SetPriority(1);
 		if((*it)->GetRemaining() < shortestCompletionTimeTask->GetRemaining())
 		{
 			shortestCompletionTimeTask = *it;

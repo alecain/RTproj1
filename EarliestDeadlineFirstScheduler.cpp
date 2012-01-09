@@ -26,6 +26,7 @@ void EarliestDeadlineFirstScheduler::ScheduleAll()
 	Task* EarliestDeadlineTask;
 
 	for (it = m_tasks.begin(); it < m_tasks.end(); it++) {
+		(*it)->SetPriority(1);
 		if((*it)->GetPeriod() < EarliestDeadlineTask->GetPeriod())
 		{
 			EarliestDeadlineTask = *it;
