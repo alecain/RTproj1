@@ -44,7 +44,6 @@ void RateMonotonicScheduler::ScheduleAll() {
 	}
 	it->setPriority(1); //TODO what value do we enter for the priority here?
 	it->schedule();
-	sem_post(m_pSemaphore);
 }
 
 /*void RateMonotonicScheduler::Reschedule() {
