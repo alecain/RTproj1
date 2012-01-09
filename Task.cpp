@@ -62,11 +62,13 @@ void *Task::run(void *object) {
     }
 
     while (inst->runThread) {
+    	printf("task %d  burning\r\n",inst->threadId);
         TraceEvent(_NTO_TRACE_INSERTUSRSTREVENT, _NTO_TRACE_USERFIRST + inst->taskId, "start");
         while (inst->remaining > 0) {
             nanospin(&UNIT_NANOSECONDS);
             --inst->remaining;
         }
+        printf("task %d done\r\n", inst->threadId);
         TraceEvent(_NTO_TRACE_INSERTUSRSTREVENT, _NTO_TRACE_USERFIRST + inst->taskId, "end");
         returnCheck(sem_wait(&inst->runSemId), true, 1, "Error waiting on runSemId.");
     }
@@ -99,7 +101,7 @@ void Task::schedule() {
 void Task::RegisterTimer(){
 
 
-	//printf("Registering timer\r\n");
+	printf("Registering timer :%d\r\n",this->threadId);
 
     struct sigevent event;
     timer_t timer; //out value for timer create

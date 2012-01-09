@@ -41,14 +41,11 @@ void *Scheduler::Start(void *object) {
 	while(!inst->m_tasks.empty()){
 		// schedule a task
 		inst->ScheduleAll();
-		// post semaphore -- call reschedule()
-		inst->Reschedule();
 		// wait for semaphore
 		sem_wait(&inst->m_pSemaphore);
 		// [ other task runs ]
 		// [ other task posts semaphore ]
 	}
-	sem_post(&inst->m_pSemaphore);
 
 	//TODO:figure out what to return? Should we return?
 	return NULL;
