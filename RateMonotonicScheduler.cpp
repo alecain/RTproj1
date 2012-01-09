@@ -26,5 +26,5 @@ void RateMonotonicScheduler::ScheduleAll() {
 			leastPeriodTask = *it;
 		}
 	}
-	leastPeriodTask->SetPriority(99);
+	leastPeriodTask->SetPriority(59);
 }

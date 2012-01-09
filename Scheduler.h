@@ -28,7 +28,8 @@ protected:
 	vector<Task*> m_tasks;
 
 public:
-	static void *Start(void *object);
+	static void *Run(void *object);
+	void Start();
 	virtual void ScheduleAll()=0;
 	void Reschedule();
 	virtual void RegisterTask(Task *pNewTask);

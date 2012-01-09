@@ -7,14 +7,14 @@
 #include <string>
 
 int main(int argc, char *argv[]) {
-	std::cout << "Welcome to the QNX Momentics IDE" << std::endl;
+;	std::cout << "Welcome to the QNX Momentics IDE" << std::endl;
 	Scheduler * scheduler(new RateMonotonicScheduler());
-	scheduler->RegisterTask(new Task(scheduler, 1, 5));
-	scheduler->RegisterTask(new Task(scheduler, 1, 5));
-	scheduler->RegisterTask(new Task(scheduler, 1, 5));
-	scheduler->RegisterTask(new Task(scheduler, 1, 5));
+	scheduler->RegisterTask(new Task(scheduler, 1, 10));
+	scheduler->RegisterTask(new Task(scheduler, 1, 10));
+	scheduler->RegisterTask(new Task(scheduler, 1, 10));
+	scheduler->RegisterTask(new Task(scheduler, 1, 10));
 
-	Scheduler::Start(scheduler);
+	scheduler->Start();
 
 	std::string input;
 	while(std::cin>>input && input!="q"){

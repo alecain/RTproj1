@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <sys/trace.h>
 #include <time.h>
+#include <pthread.h>
+#include <sched.h>
 
 #include "Task.h"
 #include "Scheduler.h"
@@ -34,9 +36,10 @@ Task::Task(Scheduler *s, int c, int p) {
     this->runThread = true;
 
     sem_init(&this->runSemId,0,0);
+    UNIT_NANOSECONDS.tv_nsec = 100000;
 
     this->RegisterTimer();
-    UNIT_NANOSECONDS.tv_nsec = 1000;
+
 }
 
 Task::~Task(){
@@ -58,13 +61,13 @@ void *Task::Run(void *object) {
     }
 
     while (inst->runThread) {
-    	printf("task %d  burning\r\n",inst->threadId);
+    	printf("task %d  burning\r\n",inst->taskId);
         TraceEvent(_NTO_TRACE_INSERTUSRSTREVENT, _NTO_TRACE_USERFIRST + inst->taskId, "start");
         while (inst->remaining > 0) {
             nanospin(&UNIT_NANOSECONDS);
             --inst->remaining;
         }
-        printf("task %d done\r\n", inst->threadId);
+        printf("task %d done (thread %d)\r\n", inst->taskId,inst->threadId);
         TraceEvent(_NTO_TRACE_INSERTUSRSTREVENT, _NTO_TRACE_USERFIRST + inst->taskId, "end");
         returnCheck(sem_wait(&inst->runSemId), true, 1, "Error waiting on runSemId.");
     }
@@ -95,22 +98,23 @@ void Task::Schedule() {
 void Task::RegisterTimer(){
 
 
-	printf("Registering timer :%d\r\n",this->threadId);
+	printf("Registering timer :%d\r\n",this->taskId);
 
     struct sigevent event;
     timer_t timer; //out value for timer create
     struct itimerspec value;
 
-    SIGEV_THREAD_INIT(&event,&PeriodElapsed,(void*)this, NULL); //fill event with instructions to start a new thread
+    SIGEV_THREAD_INIT(&event,&PeriodElapsed,(void*)this ,NULL ); //fill event with instructions to start a new thread
+    SIGEV_MAKE_CRITICAL(&event);
 
     timer_create(CLOCK_REALTIME, &event, &timer );
 
-    value.it_value.tv_nsec = this->period * UNIT_NANOSECONDS.tv_nsec;
+    value.it_value.tv_nsec = this->period * UNIT_NANOSECONDS.tv_nsec *3 ; //todo: remove *3
     value.it_value.tv_sec = 0; //TODO: set to 0 for release
 
     //the following causes the timer to reload... Which is bad when we are debugging.
-    //value.it_interval.tv_nsec = this->period*TIMESCALE;
-    //value.it_interval.tv_sec = 1;
+    value.it_interval.tv_nsec = value.it_value.tv_nsec;
+    value.it_interval.tv_sec = value.it_value.tv_sec;
     timer_settime(timer,0,&value,NULL);
 
 
@@ -131,11 +135,11 @@ void Task::PeriodElapsed(sigval arg){
     //cast the arg as a pointer to a task
     Task *ptr=(Task *)arg.sival_ptr;
 
-    //reload the timer
-   ptr->RegisterTimer();
-
     //call schedule on the supplied argument
     ptr->Schedule();
+
+    //reload the timer
+   //ptr->RegisterTimer();
 }
 
 
