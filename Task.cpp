@@ -69,6 +69,7 @@ void *Task::Run(void *object) {
         }
         printf("task %d done (thread %d)\r\n", inst->taskId,inst->threadId);
         TraceEvent(_NTO_TRACE_INSERTUSRSTREVENT, _NTO_TRACE_USERFIRST + inst->taskId, "end");
+        inst->SetPriority(0); //turn down the priority of this task
         returnCheck(sem_wait(&inst->runSemId), true, 1, "Error waiting on runSemId.");
     }
 
@@ -76,7 +77,7 @@ void *Task::Run(void *object) {
 }
 
 void Task::SetPriority(int priority) {
-	returnCheck(pthread_setschedprio(this->taskId, priority), true, 1, "Error setting priority.");
+	returnCheck(pthread_setschedprio(this->threadId, priority), true, 1, "Error setting priority.");
 }
 
 void Task::Schedule() {
@@ -104,8 +105,11 @@ void Task::RegisterTimer(){
     timer_t timer; //out value for timer create
     struct itimerspec value;
 
-    SIGEV_THREAD_INIT(&event,&PeriodElapsed,(void*)this ,NULL ); //fill event with instructions to start a new thread
+
+    pthread_setschedprio(pthread_self(), 59);
+    SIGEV_THREAD_INIT(&event,&PeriodElapsed,(void*)this , NULL ); //fill event with instructions to start a new thread
     SIGEV_MAKE_CRITICAL(&event);
+
 
     startTime = clock();
 
@@ -115,10 +119,9 @@ void Task::RegisterTimer(){
     value.it_value.tv_sec = 0; //TODO: set to 0 for release
 
     //the following causes the timer to reload... Which is bad when we are debugging.
-    value.it_interval.tv_nsec = value.it_value.tv_nsec;
-    value.it_interval.tv_sec = value.it_value.tv_sec;
+    value.it_interval.tv_nsec = 0;
+    value.it_interval.tv_sec = 0;
     timer_settime(timer,0,&value,NULL);
-
 
     //timer_connect (timerid, periodElapsed,this);
 
