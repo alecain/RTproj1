@@ -86,6 +86,11 @@ class Task {
     */
     sem_t runSemId;
 
+    /**
+     *	The time of the last period end of this task.
+     */
+    clock_t startTime;
+
 
   public:
     /**
@@ -123,6 +128,13 @@ class Task {
      */
     int GetPeriod() {
     	return this->period;
+    }
+
+    /**
+     * Returns the time until the next deadline of this task.
+     */
+    int GetTimeToDeadline() {
+    	return (startTime + period) - clock();
     }
 
     /**

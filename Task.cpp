@@ -107,6 +107,8 @@ void Task::RegisterTimer(){
     SIGEV_THREAD_INIT(&event,&PeriodElapsed,(void*)this ,NULL ); //fill event with instructions to start a new thread
     SIGEV_MAKE_CRITICAL(&event);
 
+    startTime = clock();
+
     timer_create(CLOCK_REALTIME, &event, &timer );
 
     value.it_value.tv_nsec = this->period * UNIT_NANOSECONDS.tv_nsec *3 ; //todo: remove *3
@@ -139,7 +141,7 @@ void Task::PeriodElapsed(sigval arg){
     ptr->Schedule();
 
     //reload the timer
-   //ptr->RegisterTimer();
+    ptr->RegisterTimer();
 }
 
 

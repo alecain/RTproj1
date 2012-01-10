@@ -21,11 +21,11 @@ void ShortestCompletionTimeScheduler::ScheduleAll(){
 
 	// SCT Scheduling
 	vector<Task*>::iterator it;
-	Task* shortestCompletionTimeTask;
+	Task* shortestCompletionTimeTask = NULL;
 
 	for (it = m_tasks.begin(); it < m_tasks.end(); it++) {
 		(*it)->SetPriority(1);
-		if((*it)->GetRemaining() < shortestCompletionTimeTask->GetRemaining())
+		if(shortestCompletionTimeTask == NULL || (*it)->GetRemaining() < shortestCompletionTimeTask->GetRemaining())
 		{
 			shortestCompletionTimeTask = *it;
 		}

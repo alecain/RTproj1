@@ -23,16 +23,16 @@ void EarliestDeadlineFirstScheduler::ScheduleAll()
 
 	// EDF scheduling
 	vector<Task*>::iterator it;
-	Task* EarliestDeadlineTask;
+	Task* earliestDeadlineTask = NULL;
 
 	for (it = m_tasks.begin(); it < m_tasks.end(); it++) {
 		(*it)->SetPriority(1);
-		if((*it)->GetPeriod() < EarliestDeadlineTask->GetPeriod())
+		if(earliestDeadlineTask == NULL || (*it)->GetTimeToDeadline() < earliestDeadlineTask->GetTimeToDeadline())
 		{
-			EarliestDeadlineTask = *it;
+			earliestDeadlineTask = *it;
 		}
 	}
-	EarliestDeadlineTask->SetPriority(99);
+	earliestDeadlineTask->SetPriority(99);
 //	it->schedule();
 
 }
